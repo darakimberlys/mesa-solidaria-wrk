@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaSolidariaWrk", "MesaSolidariaWrk\MesaSolidariaWrk.csproj", "{246AEDF1-88B0-46A0-BAE1-315D47A48B08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaSolidariaWrk.Core", "MesaSolidariaWrk.Core\MesaSolidariaWrk.Core.csproj", "{7F47EC19-ED5F-4562-935A-96E928E2543F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaSolidariaWrk.Repository", "MesaSolidariaWrk.Repository\MesaSolidariaWrk.Repository.csproj", "{B780F829-E785-4F52-86DC-D14A7890295C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesaSolidariaWrk.Domain", "MesaSolidariaWrk.Domain\MesaSolidariaWrk.Domain.csproj", "{F813FC29-B158-48CD-8D52-60594FA2856A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +18,17 @@ Global
 		{246AEDF1-88B0-46A0-BAE1-315D47A48B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{246AEDF1-88B0-46A0-BAE1-315D47A48B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{246AEDF1-88B0-46A0-BAE1-315D47A48B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F47EC19-ED5F-4562-935A-96E928E2543F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F47EC19-ED5F-4562-935A-96E928E2543F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F47EC19-ED5F-4562-935A-96E928E2543F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F47EC19-ED5F-4562-935A-96E928E2543F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B780F829-E785-4F52-86DC-D14A7890295C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B780F829-E785-4F52-86DC-D14A7890295C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B780F829-E785-4F52-86DC-D14A7890295C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B780F829-E785-4F52-86DC-D14A7890295C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F813FC29-B158-48CD-8D52-60594FA2856A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F813FC29-B158-48CD-8D52-60594FA2856A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F813FC29-B158-48CD-8D52-60594FA2856A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F813FC29-B158-48CD-8D52-60594FA2856A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
