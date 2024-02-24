@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS builder
 WORKDIR /app
 
-# caches restore result by copying csproj file separately
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG BUILD_CONFIGURATION=Release
 
 WORKDIR /src/MesaSolidariaWrk
 COPY . .
