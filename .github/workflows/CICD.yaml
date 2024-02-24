@@ -1,0 +1,37 @@
+  name: CI/CD Pipeline FIAP API
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+  steps:
+    - name: Checkout Repository 
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub 
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+      
+    - name: Build Docker Image
+      run: docker build -t darakimberlys/mesasolidariawrk:latest .
+          
+    - name: Push Docker Image
+      run: docker push darakimberlys/mesasolidariawrk:latest  
+        
+    - name: Set up kubectl
+      uses: azure/k8s-set-context@v1
+      with: 
+        method: kubeconfig
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        version: 1.21.0
+                   
+    - name: List path files
+      run: |
+       echo "Executando dir..."
+       dir
+    
+    - name: Deploy to AKS
+      run:
+        kubectl apply -f K8s/deployment.yaml
