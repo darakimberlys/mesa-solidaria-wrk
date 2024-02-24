@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mesa-solidaria-wrk
+  labels:
+    app: mesa-solidaria-wrk
+  namespace: namespace-workflow-1708797537480
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mesa-solidaria-wrk
+  template:
+    metadata:
+      labels:
+        app: mesa-solidaria-wrk
+    spec:
+      containers:
+        - name: mesa-solidaria-wrk
+          image: acrworkflow1708797537480.azurecr.io/image-workflow-1708797537480:latest
+          ports:
+            - containerPort: 5000
