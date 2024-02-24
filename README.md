@@ -1,6 +1,7 @@
 # Mesa-Solidaria-WRK
 
 [![Build and deploy ASP.Net Core app to Azure Web App - mesa-solidaria-wrk](https://github.com/darakimberlys/mesa-solidaria-wrk/actions/workflows/master_mesa-solidaria-wrk.yml/badge.svg?branch=master)](https://github.com/darakimberlys/mesa-solidaria-wrk/actions/workflows/master_mesa-solidaria-wrk.yml)
+[![CI/CD Pipeline mesasolidariawrk](https://github.com/darakimberlys/mesa-solidaria-wrk/actions/workflows/CICD.yaml/badge.svg?branch=master)](https://github.com/darakimberlys/mesa-solidaria-wrk/actions/workflows/CICD.yaml)
 
 ## Visão Geral
 
