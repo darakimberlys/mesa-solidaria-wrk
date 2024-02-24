@@ -1,8 +1,9 @@
-  name: CI/CD Pipeline FIAP API
+name: CI/CD Pipeline mesasolidariawrk
+
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
