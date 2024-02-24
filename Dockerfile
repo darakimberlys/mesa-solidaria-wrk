@@ -2,20 +2,20 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS builder
 WORKDIR /app
 
 # caches restore result by copying csproj file separately
-COPY *.csproj .
-RUN dotnet restore
 
+WORKDIR /src/MesaSolidariaWrk
 COPY . .
-RUN dotnet publish --output /app/ --configuration Release --no-restore
-RUN sed -n 's:.*<AssemblyName>\(.*\)</AssemblyName>.*:\1:p' *.csproj > __assemblyname
-RUN if [ ! -s __assemblyname ]; then filename=$(ls *.csproj); echo ${filename%.*} > __assemblyname; fi
+RUN dotnet restore "MesaSolidariaWrk/MesaSolidariaWrk.csproj"
+RUN dotnet build "MesaSolidariaWrk/MesaSolidariaWrk.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Stage 2
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "MesaSolidariaWrk/MesaSolidariaWrk.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
 WORKDIR /app
-COPY --from=builder /app .
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "MesaSolidariaWrk.dll"]
 
 ENV PORT 5000
 EXPOSE 5000
-
-ENTRYPOINT dotnet $(cat /app/__assemblyname).dll --urls "http://*:5000"
