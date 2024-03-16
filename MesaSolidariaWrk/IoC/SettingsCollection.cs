@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using MassTransit;
 using MesaSolidariaWrk.Core.Services;
 using MesaSolidariaWrk.Core.Services.Interfaces;
@@ -19,20 +20,20 @@ public static class SettingsCollection
             MySqlServerVersion.LatestSupportedServerVersion));
     }
 
-    public static void AddPubSubConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static void AddPubSubConfiguration(this IServiceCollection services)
     {
-        var fila = configuration.GetSection("MassTransitAzure")["Subscription"] ?? string.Empty;
-        var conexao = configuration.GetSection("MassTransitAzure")["PubSubConnection"] ?? string.Empty;
+        var fila = Environment.GetEnvironmentVariable("Subscription") ?? string.Empty;
+        var conexao = Environment.GetEnvironmentVariable("PubSubConnection") ?? string.Empty;
 
-        services.AddMassTransit(x =>
+        services.AddSingleton<ServiceBusReceiver>(serviceProvider =>
         {
-            x.UsingAzureServiceBus((context, cfg) =>
-            {
-                cfg.Host(conexao);
-
-                cfg.ReceiveEndpoint(fila, e => { e.Consumer<ReceivedMessage>(); });
-            });
+            var client = new ServiceBusClient(conexao);
+            var receiver = client.CreateReceiver(fila);
+            return receiver;
         });
+
+        services.AddHostedService<Worker>();
+
     }
 
     public static void AddServices(this IServiceCollection serviceCollection)

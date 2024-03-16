@@ -1,6 +1,9 @@
 using System.Text;
+using System.Text.Json;
 using Azure.Messaging.ServiceBus;
-using MesaSolidariaWrk.Core.Services.Interfaces;
+using MesaSolidariaWrk.Domain.Data;
+using MesaSolidariaWrk.Event;
+using Message = Microsoft.Azure.ServiceBus.Message;
 
 namespace MesaSolidariaWrk;
 
@@ -10,21 +13,15 @@ public class Worker : BackgroundService
     private readonly ServiceBusClient _serviceBusClient;
     private readonly ServiceBusReceiver _receiver;
     private readonly IConfiguration _configuration;
-    private readonly IDonationService _donationService;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public Worker(ILogger<Worker> logger, 
-        IConfiguration configuration, 
-        IDonationService donationService,
-        IServiceScopeFactory serviceScopeFactory)
+    public Worker(ILogger<Worker> logger, IConfiguration configuration)
     {
         _logger = logger;
         _configuration = configuration;
-        _donationService = donationService;
-        _serviceScopeFactory = serviceScopeFactory;
 
-        var fila = configuration.GetSection("MassTransitAzure")["Subscription"] ?? string.Empty;
-        var conexao = configuration.GetSection("MassTransitAzure")["Connection"] ?? string.Empty;
+        // TODO: Initialize Azure Service Bus client and receiver
+        var fila = Environment.GetEnvironmentVariable("Subscription") ?? string.Empty;
+        var conexao = Environment.GetEnvironmentVariable("PubSubConnection") ?? string.Empty;
 
         _serviceBusClient = new ServiceBusClient(conexao);
         _receiver = _serviceBusClient.CreateReceiver(fila);
@@ -32,25 +29,24 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using (var scope = _serviceScopeFactory.CreateScope())
+        while (!stoppingToken.IsCancellationRequested)
         {
-            var donationService = scope.ServiceProvider.GetRequiredService<IDonationService>();
-            // Use donationService dentro deste escopo
+            // TODO: Receive messages from Azure Service Bus
+            var receivedMessage = await _receiver.ReceiveMessageAsync(cancellationToken: stoppingToken);
 
-            while (!stoppingToken.IsCancellationRequested)
+            if (receivedMessage != null)
             {
-                var receivedMessage = await _receiver.ReceiveMessageAsync(cancellationToken: stoppingToken);
-
-                if (receivedMessage != null)
+                var body = receivedMessage.Body;
+                var message = Encoding.UTF8.GetString(body);
+                var pedido = JsonSerializer.Deserialize<ReceivedMessageData>(message);
+                if (pedido.Message != null)
                 {
-                    var body = receivedMessage.Body;
-                    var message = Encoding.UTF8.GetString(body);
-
-                    await _donationService.ProcessMessage(message);
+                    Console.WriteLine(pedido.Message.MessageType.ToString());
                 }
-
-                await _receiver.CompleteMessageAsync(receivedMessage, stoppingToken);
             }
+
+            // TODO: Complete the message to remove it from the queue
+            await _receiver.CompleteMessageAsync(receivedMessage);
         }
     }
 }
