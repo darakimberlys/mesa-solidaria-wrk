@@ -1,37 +1,43 @@
-using System.Text.Json;
 using MesaSolidariaWrk.Core.Services.Interfaces;
 using MesaSolidariaWrk.Domain.Data;
 using MesaSolidariaWrk.Repository;
+using Microsoft.Extensions.Logging;
 
 namespace MesaSolidariaWrk.Core.Services;
 
 public class DonationService : IDonationService
 {
     private readonly IDonationRepository _donationRepository;
+    private readonly ILogger<DonationService> _logger;
 
-    public DonationService(IDonationRepository donationRepository)
+    public DonationService(ILogger<DonationService> logger , IDonationRepository donationRepository)
     {
+        _logger = logger;
         _donationRepository = donationRepository;
     }
 
-    public async Task ProcessMessage(MessageData message)
+    public async Task ProcessMessageAsync(MessageData message)
     {
         switch (message.MessageType)
         {
             case MessageType.PackageReceived
-                : await _donationRepository.InsertPackagesAsync(message.Package);
+                : _logger.LogInformation("New package received!");
+                await _donationRepository.InsertPackagesAsync(message.Package);
                 break;
             
             case MessageType.ProductsReceived
-                : await _donationRepository.InsertProductsAsync(message.Product);
+                : _logger.LogInformation("New product received!");
+                await _donationRepository.InsertProductsAsync(message.Product);
                 break;
             
             case MessageType.DeliveryStatus
-                : CheckDelivery(message.Delivery);
+                : _logger.LogInformation("New deliveryStatus received!");
+                CheckDelivery(message.Delivery);
                 break;
             
             case MessageType.DonationRequest
-                : await _donationRepository.InsertDonationRequestAsync(message.Package);
+                : _logger.LogInformation("New donation request received!");
+                await _donationRepository.InsertDonationRequestAsync(message.Package);
                 break;
             //good to add logs in this
         }

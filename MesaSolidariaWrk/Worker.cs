@@ -1,28 +1,23 @@
 using System.Text;
-using System.Text.Json;
 using Azure.Messaging.ServiceBus;
-using MesaSolidariaWrk.Core.Services.Interfaces;
 using MesaSolidariaWrk.Domain.Data;
-using MesaSolidariaWrk.Event;
 using Newtonsoft.Json;
-using Message = Microsoft.Azure.ServiceBus.Message;
 
 namespace MesaSolidariaWrk;
 
-public class Worker : BackgroundService
+public class Worker : BackgroundService, IHostedService
 {
     private readonly ILogger<Worker> _logger;
     private readonly ServiceBusClient _serviceBusClient;
     private readonly ServiceBusReceiver _receiver;
-    private readonly IConfiguration _configuration;
-    private readonly IDonationService _donationService;
+   // private readonly IDonationService _donationService;
 
-    public Worker(ILogger<Worker> logger, IConfiguration configuration, IDonationService donationService)
+    public Worker(ILogger<Worker> logger
+            //  , IDonationService donationService
+    )
     {
         _logger = logger;
-        _configuration = configuration;
-        _donationService = donationService;
-        
+      //  _donationService = donationService;
         // TODO: Initialize Azure Service Bus client and receiver
         var fila = Environment.GetEnvironmentVariable("Subscription") ?? string.Empty;
         var conexao = Environment.GetEnvironmentVariable("PubSubConnection") ?? string.Empty;
@@ -45,7 +40,8 @@ public class Worker : BackgroundService
                 var receivedMessageData = JsonConvert.DeserializeObject<ReceivedMessageData>(message);
                 if (receivedMessageData.Message != null)
                 {
-                    await _donationService.ProcessMessage(receivedMessageData.Message);
+                    Console.WriteLine($"Message received: {receivedMessageData.Message.MessageType}, Sending to process!");
+                    //await _donationService.ProcessMessage(receivedMessageData.Message);
                 }
             }
 

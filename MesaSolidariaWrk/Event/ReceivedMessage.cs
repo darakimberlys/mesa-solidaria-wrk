@@ -1,5 +1,8 @@
 using MassTransit;
+using MesaSolidariaWrk.Core.Services;
+using MesaSolidariaWrk.Core.Services.Interfaces;
 using MesaSolidariaWrk.Domain.Data;
+using MesaSolidariaWrk.Repository;
 
 namespace MesaSolidariaWrk.Event;
 

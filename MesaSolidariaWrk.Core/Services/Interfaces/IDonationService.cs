@@ -5,6 +5,6 @@ namespace MesaSolidariaWrk.Core.Services.Interfaces;
 
 public interface IDonationService
 {
-    Task ProcessMessage(MessageData message);
+    Task ProcessMessageAsync(MessageData message);
 
 }
