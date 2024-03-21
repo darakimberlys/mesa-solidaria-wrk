@@ -14,26 +14,24 @@ public class DonationService : IDonationService
         _donationRepository = donationRepository;
     }
 
-    public async Task ProcessMessage(string message)
+    public async Task ProcessMessage(MessageData message)
     {
-        var deserializedMessage = JsonSerializer.Deserialize<Message>(message);
-
-        switch (deserializedMessage.MessageType)
+        switch (message.MessageType)
         {
             case MessageType.PackageReceived
-                : await _donationRepository.InsertPackagesAsync(deserializedMessage.Package);
+                : await _donationRepository.InsertPackagesAsync(message.Package);
                 break;
             
             case MessageType.ProductsReceived
-                : await _donationRepository.InsertProductsAsync(deserializedMessage.Product);
+                : await _donationRepository.InsertProductsAsync(message.Product);
                 break;
             
             case MessageType.DeliveryStatus
-                : CheckDelivery(deserializedMessage.Delivery);
+                : CheckDelivery(message.Delivery);
                 break;
             
             case MessageType.DonationRequest
-                : await _donationRepository.InsertDonationRequestAsync(deserializedMessage.Package);
+                : await _donationRepository.InsertDonationRequestAsync(message.Package);
                 break;
             //good to add logs in this
         }

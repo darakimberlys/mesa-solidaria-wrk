@@ -1,6 +1,6 @@
 namespace MesaSolidariaWrk.Domain.Data;
 
-public class Message
+public class MessageData
 {
     public MessageType MessageType { get; set; }
     public Package Package { get; set; }

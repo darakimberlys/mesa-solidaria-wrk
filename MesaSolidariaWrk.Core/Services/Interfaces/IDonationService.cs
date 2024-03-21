@@ -1,8 +1,10 @@
 
+using MesaSolidariaWrk.Domain.Data;
+
 namespace MesaSolidariaWrk.Core.Services.Interfaces;
 
 public interface IDonationService
 {
-    Task ProcessMessage(string message);
+    Task ProcessMessage(MessageData message);
 
 }
